@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>View Maintainence</title>
+    <link href="../static/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        .heading {
+            color: #DCDCDC;
+        }
+
+        body {
+            background-color: #C0C0C0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <center>
+                <h1 class="heading">Materialized Views</center>
+        </div>
+    </nav>
+    <br>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg-8">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        {% for attr in attrs %}
+                        <td>{{attr}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% for row in data %}
+                    <tr>
+                        {% for val in row %}
+                        <td>{{val}}</td>
+                        {% endfor %} 
+                        
+                        {% if not view %}
+                        <td>
+                            <center>
+                                <a href="#">Delete</a>
+                            </center>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    
+                    {% endfor %}
+              
+                </table>
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg-8">
+                <center>
+                    <a href="{{ url_for('index') }}">
+                        <button type="button" class="btn btn-primary">Back</button>
+                    </a>
+                </center>
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>
