@@ -12,25 +12,47 @@ conn = mysql.connect()
             else:
 return json.dumps({'error':str(data[0])})
 '''
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, flash, url_for, session
 from app import app, mysql
-from app.models import db, Pokemon
-
-
+from app.admin import auth
+'''
+@app.route('/')
+def index():
+    conn = mysql.connect()
+    cur = conn.cursor()
+    cur.execute('show tables;')
+    data = cur.fetchall()
+    cur.close()
+    print (data)
+    return 'HELLO'
+'''
 @app.route('/', methods=['GET','POST'])
 def index():
     if request.method == 'GET':
-        return render_template('index.html')
+        if session.get('auth'):
+            return render_template('index.html')
+        else:
+            return redirect(url_for('login'))
     else:
         conn = mysql.connect()
         cur = conn.cursor()
-        cur.callproc('refresh_mv_now')
-        cur.execute('select * from pokemon_mv;')
-        data = cur.fetchall()
+        cur.execute('desc pokemon_mv;')
+        data =cur.fetchmany(3)
+        attrs = []
+        for d in data:
+            attrs.append(d[0])
+
+        cur.execute('select * from pokemons;')
+        data1 = cur.fetchmany(5)
+
+        cur.execute('select * from pokemons;')
+        data2 = cur.fetchmany(5)
+        
         cur.close()
-        return render_template('index.html', data=data)
+        print(len(data1),len(data2))
+        return render_template('relation.html', attrs=attrs,data1=data1, data2=data2, data=data1)
 
-
+'''
 @app.route('/insert')
 def insert():
     conn = mysql.connect()
@@ -45,3 +67,58 @@ def insert():
     conn.commit()
     cursor.close()
     return redirect('/')
+'''
+
+'''
+login to the site to view/edit rest of the file
+'''
+@app.route('/login',methods=['POST','GET'])
+def login():
+    if request.method == 'GET':
+        if not session.get('auth'):
+            return render_template('login.html')
+        else:
+            return redirect(url_for('index'))
+    else:
+        if auth(request.form['username'],request.form['password']):
+            flash('Successfully logged in')
+            return redirect(url_for('index'))
+        else:
+            flash('Wrong credentials')
+            return redirect(url_for('login'))
+
+@app.route('/table/1')
+def table1():
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute('desc pokemon_mv')
+    data = cursor.fetchall()
+    attrs = []
+    for d in data:
+        attrs.append(d[0])
+    x = 'select * from pokemon_mv;'
+    cursor.execute(x)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('relation.html',attrs=attrs,data=data)
+
+@app.route('/table/2')
+def table2():
+    pass
+
+@app.route('/insert',methods=['POST'])
+def insert():
+    pass
+    '''
+    name name
+    type1 type1
+    type2 type2
+    hp hp
+    attack attack
+    defense defense
+    sp_attack
+    sp_defense
+    speed
+    gen
+    leg
+    '''

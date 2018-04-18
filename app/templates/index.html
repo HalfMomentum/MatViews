@@ -30,21 +30,9 @@
                 <div class="table">
                     <table class="m-auto table-striped">
                         <th>
-
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
-                            <td>Name</td>
+                        {% for attr in attrs %}
+                            <td>{{attr}}</td>
+                        {% endfor %}
                         </th>
                         {% for d in data %}
                         <tr>
