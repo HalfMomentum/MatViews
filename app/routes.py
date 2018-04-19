@@ -52,22 +52,24 @@ def index():
         print(len(data1),len(data2))
         return render_template('relation.html', attrs=attrs,data1=data1, data2=data2, data=data1)
 
-'''
-@app.route('/insert')
+
+@app.route('/insert', methods=['POST'])
 def insert():
     conn = mysql.connect()
     cursor = conn.cursor()
-    csv_data = csv.reader(open('pokemon_copy.csv'))
-    for row in csv_data:
-        x = 'INSERT INTO pokemons VALUES( NULL, %a, %a, %a, % d, % d, % d, % d, % d, % d, % d,%d, % r)' % (row[1], row[2], row[3], int(row[4]), int(row[5]), int(row[6]), int(row[7]), int(row[8]), int(row[9]), int(row[10]),int(row[11]) ,bool(row[12]))
-        
-        cursor.execute(x)
-        print(type (row[0]))
-    # close the connection to the database.
+    row = []
+    data = request.form
+    for d in data:
+        row.append(data[d])
+    print(row)
+    #insert some values into pokemon_stats and some in pokemon__details
+    x = 'INSERT INTO pokemons VALUES( NULL, %a, %a, %a, % d, % d, % d, % d, % d, % d, % d,%d, % r)' % (row[1], row[2], row[3], int(row[4]), int(row[5]), int(row[6]), int(row[7]), int(row[8]), int(row[9]), int(row[10]),int(row[11]) ,bool(row[12]))
+    print(x)
+    '''cursor.execute(x)
     conn.commit()
-    cursor.close()
+    cursor.close()'''
     return redirect('/')
-'''
+
 
 '''
 login to the site to view/edit rest of the file
@@ -78,8 +80,9 @@ def login():
         if not session.get('auth'):
             return render_template('login.html')
         else:
+            flash('Already logged in')
             return redirect(url_for('index'))
-    else:
+    else:    
         if auth(request.form['username'],request.form['password']):
             flash('Successfully logged in')
             return redirect(url_for('index'))
@@ -89,26 +92,41 @@ def login():
 
 @app.route('/table/1')
 def table1():
+    #for table 1
     conn = mysql.connect()
     cursor = conn.cursor()
-    cursor.execute('desc pokemon_mv')
+    cursor.execute('desc pokemons')
     data = cursor.fetchall()
+    #table headers are in attrs
     attrs = []
     for d in data:
         attrs.append(d[0])
-    x = 'select * from pokemon_mv;'
+    x = 'select * from pokemons;'
     cursor.execute(x)
+    #table content is in data
     data = cursor.fetchall()
     cursor.close()
     return render_template('relation.html',attrs=attrs,data=data)
 
 @app.route('/table/2')
 def table2():
-    pass
+    #for table 2
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute('desc pokemons')
+    data = cursor.fetchall()
+    #table headers are in attrs
+    attrs = []
+    for d in data:
+        attrs.append(d[0])
+    x = 'select * from pokemons;'
+    cursor.execute(x)
+    #table content is in data
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('relation.html',attrs=attrs,data=data)
 
-@app.route('/insert',methods=['POST'])
-def insert():
-    pass
+
     '''
     name name
     type1 type1

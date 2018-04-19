@@ -1,0 +1,11 @@
+{
+    "git.ignoreLimitWarning": true,
+    "python.pythonPath": "${workspaceFolder}/env/bin/python",
+    "python.linting.enabled": true,
+    "python.formatting.provider": "yapf",
+    "python.linting.pylintEnabled": false,
+    "python.autoComplete.extraPaths": [
+        "${env.SPARK_HOME}/python",
+        "${env.SPARK_HOME}/python/pyspark"
+    ]
+}
